@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using RoboticForkliftControlSystem.Api.Abstractions;
 using RoboticForkliftControlSystem.Api.Data;
+using RoboticForkliftControlSystem.Api.Services;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddHealthChecks();
 builder.Services.AddOpenApi();
+
+builder.Services.AddScoped<IForkliftService, ForkliftService>();
+builder.Services.AddScoped<IMovementService, MovementService>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
