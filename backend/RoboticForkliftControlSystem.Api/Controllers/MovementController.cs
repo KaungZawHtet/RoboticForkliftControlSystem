@@ -19,8 +19,8 @@ public class MovementController : ControllerBase
         _movementService = movementService;
     }
 
-    [HttpPost("parse")]
-    public ActionResult<MovementResult> ParseMovementCommand([FromBody] string command)
+    [HttpGet("parse")]
+    public ActionResult<MovementResult> ParseMovementCommand([FromQuery] string command)
     {
         try
         {
