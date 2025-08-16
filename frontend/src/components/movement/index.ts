@@ -1,0 +1,1 @@
+export { MovementCommandInput } from './MovementCommandInput';

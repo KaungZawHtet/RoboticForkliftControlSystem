@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using RoboticForkliftControlSystem.Api.Abstractions;
 using RoboticForkliftControlSystem.Api.Data;
@@ -13,6 +14,21 @@ builder.Services.AddOpenApi();
 builder.Services.AddScoped<IForkliftService, ForkliftService>();
 builder.Services.AddScoped<IMovementService, MovementService>();
 
+var allowedOrigins =
+    builder.Configuration.GetSection("AllowedOrigins").Get<string[]>() ?? Array.Empty<string>();
+const string CorsPolicy = "Frontend";
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(
+        name: CorsPolicy,
+        policy =>
+        {
+            policy.WithOrigins(allowedOrigins).AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+        }
+    );
+});
+
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     var cs = builder.Configuration.GetConnectionString("Default");
@@ -25,6 +41,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     }
 });
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -36,7 +53,7 @@ if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
 
 app.UseHttpsRedirection();
 
-
+app.UseCors(CorsPolicy);
 app.MapControllers();
 
 app.MapHealthChecks("/healthz");
