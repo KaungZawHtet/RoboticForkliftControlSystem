@@ -39,7 +39,7 @@ export interface ApiResponse<T> {
 
 // Form types
 export interface FileUploadForm {
-    file: FileList;
+    file: FileList | null;
 }
 
 export interface MovementCommandForm {

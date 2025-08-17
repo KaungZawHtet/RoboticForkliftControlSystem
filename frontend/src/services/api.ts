@@ -1,4 +1,3 @@
-// src/services/api.ts
 import axios, {
     AxiosError,
     type AxiosInstance,
@@ -22,17 +21,18 @@ class ApiService {
         this.setupInterceptors();
     }
 
+    //NOTE: interceptor work as middleware, in future, we can even work include bear auth here. It might be good be setup it here
     private setupInterceptors(): void {
         // Request interceptor
         this.client.interceptors.request.use(
             (config) => {
                 console.log(
-                    `🚀 API Request: ${config.method?.toUpperCase()} ${config.url}`,
+                    `API Request: ${config.method?.toUpperCase()} ${config.url}`,
                 );
                 return config;
             },
             (error) => {
-                console.error('❌ Request Error:', error);
+                console.error('Request Error:', error);
                 return Promise.reject(error);
             },
         );
@@ -41,13 +41,13 @@ class ApiService {
         this.client.interceptors.response.use(
             (response) => {
                 console.log(
-                    `✅ API Response: ${response.status} ${response.config.url}`,
+                    `API Response: ${response.status} ${response.config.url}`,
                 );
                 return response;
             },
             (error: AxiosError) => {
                 console.error(
-                    '❌ Response Error:',
+                    'Response Error:',
                     error.response?.status,
                     error.message,
                 );
@@ -87,7 +87,7 @@ class ApiService {
             return response.data;
         } catch (error) {
             if (retries > 0 && this.shouldRetry(error as AxiosError)) {
-                console.log(`🔄 Retrying request... ${retries} attempts left`);
+                console.log(`Retrying request... ${retries} attempts left`);
                 await this.delay(1000); // Wait 1 second before retry
                 return this.request<T>(config, retries - 1);
             }

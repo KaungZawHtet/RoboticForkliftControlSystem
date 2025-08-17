@@ -1,12 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiService } from '../services/api';
 import { toast } from 'react-hot-toast';
-import { UI_MESSAGES } from '../config/constants';
+import { QUERY_KEYS, UI_MESSAGES } from '../config/constants';
 import type { Forklift } from '../types';
 
-export const QUERY_KEYS = {
-    FORKLIFTS: ['forklifts'] as const,
-};
+
 
 export function useForkliftData() {
     const queryClient = useQueryClient();

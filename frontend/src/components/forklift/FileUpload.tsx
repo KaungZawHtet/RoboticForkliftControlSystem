@@ -4,9 +4,9 @@ import { useForm, Controller } from 'react-hook-form';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Alert } from '../ui/Alert';
-import { useFileValidation } from '../../hooks/useFileValidation';
 import { formatFileSize } from '../../utils';
 import type { FileUploadForm } from '../../types';
+import { FILE_CONFIG, UI_MESSAGES } from '../../config/constants';
 
 interface FileUploadProps {
   onFileUpload: (file: File) => void;
@@ -16,21 +16,37 @@ interface FileUploadProps {
 
 export const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload, isUploading, error }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { validateFile } = useFileValidation();
+ 
   const { control, handleSubmit, watch, setValue, formState: { errors } } = useForm<FileUploadForm>();
 
   const selectedFile = watch('file')?.[0];
 
   const onSubmit = (data: FileUploadForm) => {
-    const file = data.file[0];
-    if (file) {
+      const file = data.file?.[0];
+      if (!file) return;
+
       const validation = validateFile(file);
-      if (!validation.isValid) {
-        return;
-      }
+      if (!validation.isValid) return;
+
       onFileUpload(file);
-    }
   };
+
+   function validateFile(file: File): {
+      isValid: boolean;
+      error?: string;
+  } {
+      const dot = file.name.lastIndexOf('.');
+      const ext = dot >= 0 ? file.name.slice(dot).toLowerCase() : '';
+      if (
+          !FILE_CONFIG.ACCEPTED_TYPES.map((t) => t.toLowerCase()).includes(ext)
+      ) {
+          return { isValid: false, error: UI_MESSAGES.ERROR.INVALID_FILE_TYPE };
+      }
+      if (file.size > FILE_CONFIG.MAX_SIZE_BYTES) {
+          return { isValid: false, error: UI_MESSAGES.ERROR.FILE_TOO_LARGE };
+      }
+      return { isValid: true };
+  }
 
   const handleFileSelect = (files: FileList | null) => {
     if (files && files[0]) {
@@ -42,7 +58,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload, isUploadin
   };
 
   const clearFile = () => {
-    setValue('file', null as any);
+    setValue('file', null);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }

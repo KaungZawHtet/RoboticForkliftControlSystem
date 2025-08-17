@@ -19,7 +19,7 @@ export const MovementCommandInput: React.FC<MovementCommandInputProps> = ({
   result,
   error
 }) => {
-  const { register, handleSubmit, formState: { errors }, reset } = useForm<MovementCommandForm>();
+  const { register, handleSubmit, formState: { errors } } = useForm<MovementCommandForm>();
 
   const onSubmit = (data: MovementCommandForm) => {
     onCommandSubmit(data.command.trim().toUpperCase());

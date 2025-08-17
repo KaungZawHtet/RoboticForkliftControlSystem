@@ -1,4 +1,3 @@
-// src/config/constants.ts
 export const API_CONFIG = {
     BASE_URL: 'http://localhost:5043/api',
     TIMEOUT: 10000,
@@ -28,14 +27,7 @@ export const MOVEMENT_COMMANDS = {
     RIGHT: 'R',
 } as const;
 
-export const VALIDATION_RULES = {
-    DEGREES: {
-        MIN: 0,
-        MAX: 360,
-        STEP: 90,
-    },
-    COMMAND_PATTERN: /^[FBLR]\d+$/i,
-} as const;
+ 
 
 export const UI_MESSAGES = {
     SUCCESS: {
@@ -56,3 +48,7 @@ export const UI_MESSAGES = {
         PARSING_COMMAND: 'Parsing command...',
     },
 } as const;
+
+export const QUERY_KEYS = {
+    FORKLIFTS: ['forklifts'] as const,
+};
