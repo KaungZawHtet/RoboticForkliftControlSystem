@@ -64,19 +64,16 @@ namespace RoboticForkliftControlSystem.Test
         }
 
         [Test]
-        public void ParseMovementCommand_IsCaseInsensitive()
+        public void ParseMovementCommand_IsSmallCaseInvalid()
         {
             var result = _sut.ParseMovementCommand("f10r90");
 
-            Assert.That(result.IsValid, Is.True);
+            Assert.That(result.IsValid, Is.False);
             Assert.That(
-                result.Commands.Select(c => c.Action),
-                Is.EqualTo(new[] { "F", "R" }).AsCollection
+                string.Join(" | ", result.Errors),
+                Does.Contain("No valid commands found in input")
             );
-            Assert.That(
-                result.Commands.Select(c => c.Value),
-                Is.EqualTo(new[] { 10, 90 }).AsCollection
-            );
+            Assert.That(result.Commands, Is.Empty);
         }
 
         [Test]
