@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoboticForkliftControlSystem.Api", "RoboticForkliftControlSystem.Api\RoboticForkliftControlSystem.Api.csproj", "{C8708B04-2E5E-4104-A599-4A937FB4B3D2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoboticForkliftControlSystem.Test", "RoboticForkliftControlSystem.Test\RoboticForkliftControlSystem.Test.csproj", "{F771733F-13CF-4D18-AD17-6492AD818E68}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{C8708B04-2E5E-4104-A599-4A937FB4B3D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8708B04-2E5E-4104-A599-4A937FB4B3D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8708B04-2E5E-4104-A599-4A937FB4B3D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F771733F-13CF-4D18-AD17-6492AD818E68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F771733F-13CF-4D18-AD17-6492AD818E68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F771733F-13CF-4D18-AD17-6492AD818E68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F771733F-13CF-4D18-AD17-6492AD818E68}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

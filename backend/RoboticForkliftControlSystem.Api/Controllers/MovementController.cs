@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using RoboticForkliftControlSystem.Api.Abstractions;
-using RoboticForkliftControlSystem.Api.Entities;
+using RoboticForkliftControlSystem.Api.Dtos;
 
 namespace RoboticForkliftControlSystem.Api.Controllers;
 

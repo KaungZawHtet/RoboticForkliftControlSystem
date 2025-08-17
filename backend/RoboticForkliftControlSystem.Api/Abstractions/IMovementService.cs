@@ -1,4 +1,4 @@
-using RoboticForkliftControlSystem.Api.Entities;
+using RoboticForkliftControlSystem.Api.Dtos;
 
 namespace RoboticForkliftControlSystem.Api.Abstractions;
 

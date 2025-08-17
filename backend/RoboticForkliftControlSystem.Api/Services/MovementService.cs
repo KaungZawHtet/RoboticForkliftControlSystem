@@ -1,79 +1,84 @@
 using System.Text.RegularExpressions;
 using RoboticForkliftControlSystem.Api.Abstractions;
-using RoboticForkliftControlSystem.Api.Entities;
+using RoboticForkliftControlSystem.Api.Dtos;
 
 namespace RoboticForkliftControlSystem.Api.Services;
-
 
 public class MovementService : IMovementService
 {
     public MovementResult ParseMovementCommand(string command)
     {
-        var result = new MovementResult { IsValid = true };
+        var commands = new List<MovementCommand>();
+        var errors = new List<string>();
 
         if (string.IsNullOrWhiteSpace(command))
-        {
-            result.IsValid = false;
-            result.Errors.Add("Command cannot be empty");
-            return result;
-        }
+            return Invalid("Command cannot be empty");
 
-        var pattern = @"([FBLR])(\d+)";
-        var matches = Regex.Matches(command.ToUpper(), pattern);
+        // Case-insensitive & compiled. Matches tokens like F10, R90, etc.
+        var regex = new Regex(@"([FBLR])(\d+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        foreach (Match match in matches)
+        var input = command.Trim();
+        var matches = regex.Matches(input);
+
+        if (matches.Count == 0)
+            return Invalid("No valid commands found in input");
+
+        var consumed = 0;
+
+        foreach (Match m in matches)
         {
-            var action = match.Groups[1].Value;
-            if (!int.TryParse(match.Groups[2].Value, out int value))
+            consumed += m.Length;
+
+            var action = char.ToUpperInvariant(m.Groups[1].Value[0]);
+            if (!int.TryParse(m.Groups[2].Value, out var value))
             {
-                result.IsValid = false;
-                result.Errors.Add($"Invalid value for action {action}");
+                errors.Add($"Invalid value for action {action}");
                 continue;
             }
 
-            var movementCommand = new MovementCommand { Action = action, Value = value };
+            // shared turn validation
+            bool IsInvalidTurn(int v) => v < 0 || v > 360 || v % 90 != 0;
 
-            switch (action)
+            string? description = action switch
             {
-                case "F":
-                    movementCommand.Description = $"Move Forward by {value} metres.";
-                    break;
-                case "B":
-                    movementCommand.Description = $"Move Backward by {value} metres.";
-                    break;
-                case "L":
-                    if (value < 0 || value > 360 || value % 90 != 0)
-                    {
-                        result.IsValid = false;
-                        result.Errors.Add(
-                            $"Left turn degrees must be between 0-360 and multiples of 90. Got: {value}"
-                        );
-                        continue;
-                    }
-                    movementCommand.Description = $"Turn Left by {value} degrees.";
-                    break;
-                case "R":
-                    if (value < 0 || value > 360 || value % 90 != 0)
-                    {
-                        result.IsValid = false;
-                        result.Errors.Add(
-                            $"Right turn degrees must be between 0-360 and multiples of 90. Got: {value}"
-                        );
-                        continue;
-                    }
-                    movementCommand.Description = $"Turn Right by {value} degrees.";
-                    break;
-            }
+                'F' => $"Move Forward by {value} metres.",
+                'B' => $"Move Backward by {value} metres.",
+                'L' => IsInvalidTurn(value)
+                    ? AddErr(
+                        errors,
+                        $"Left turn degrees must be between 0-360 and multiples of 90. Got: {value}"
+                    )
+                    : $"Turn Left by {value} degrees.",
+                'R' => IsInvalidTurn(value)
+                    ? AddErr(
+                        errors,
+                        $"Right turn degrees must be between 0-360 and multiples of 90. Got: {value}"
+                    )
+                    : $"Turn Right by {value} degrees.",
+                _ => AddErr(errors, $"Unknown action '{action}'"),
+            };
 
-            result.Commands.Add(movementCommand);
+            if (description is not null)
+                commands.Add(new MovementCommand(action.ToString(), value, description));
         }
 
-        if (result.Commands.Count == 0)
-        {
-            result.IsValid = false;
-            result.Errors.Add("No valid commands found in input");
-        }
+        // Detect any junk between tokens (e.g., "F10X5")
+        if (consumed != input.Length)
+            errors.Add("Input contains unexpected characters or format between commands.");
 
-        return result;
+        bool isValid = errors.Count == 0 && commands.Count > 0;
+        if (!isValid && errors.Count == 0)
+            errors.Add("No valid commands found in input");
+
+        return new MovementResult(isValid, commands, errors);
     }
+
+    private static string? AddErr(List<string> errors, string msg)
+    {
+        errors.Add(msg);
+        return null;
+    }
+
+    private static MovementResult Invalid(string msg) =>
+        new(false, new List<MovementCommand>(), new List<string> { msg });
 }
