@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using RoboticForkliftControlSystem.Api.Abstractions;
+using RoboticForkliftControlSystem.Api.Constants;
 using RoboticForkliftControlSystem.Api.Dtos;
 
 namespace RoboticForkliftControlSystem.Api.Controllers;
@@ -23,9 +24,12 @@ public class MovementController : ControllerBase
             var result = _movementService.ParseMovementCommand(command);
             return Ok(result);
         }
-        catch (Exception ex)
+        catch
         {
-            return StatusCode(500, $"Error parsing movement command: {ex.Message}");
+            return StatusCode(
+                StatusCodes.Status500InternalServerError,
+                MovementMessages.ParsingError
+            );
         }
     }
 }

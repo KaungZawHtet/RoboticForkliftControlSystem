@@ -7,6 +7,8 @@ namespace RoboticForkliftControlSystem.Api.Services;
 
 public class MovementService : IMovementService
 {
+    const int Empty = 0;
+
     public MovementResult ParseMovementCommand(string command)
     {
         var commands = new List<MovementCommand>();
@@ -20,16 +22,16 @@ public class MovementService : IMovementService
         var input = command.Trim();
         var matches = regex.Matches(input);
 
-        if (matches.Count is 0)
+        if (matches.Count is Empty)
             return Invalid(MovementMessages.NoValidCommands);
 
-        var consumed = 0;
+        var consumed = Empty;
 
         foreach (Match match in matches)
         {
             consumed += match.Length;
 
-            var action = match.Groups[1].Value[0];
+            var action = match.Groups[1].Value.First(); // Action string to Action Char
             if (!int.TryParse(match.Groups[2].Value, out var value))
             {
                 errors.Add(MovementMessages.InvalidValueForAction(action));
@@ -56,8 +58,8 @@ public class MovementService : IMovementService
         if (consumed != input.Length)
             errors.Add(MovementMessages.UnexpectedChars);
 
-        bool isValid = errors.Count is 0 && commands.Count > 0;
-        if (!isValid && errors.Count is 0)
+        bool isValid = errors.Count is Empty && commands.Count > Empty;
+        if (!isValid && errors.Count is Empty)
             errors.Add(MovementMessages.NoValidCommands);
 
         return new MovementResult(isValid, commands, errors);
@@ -75,5 +77,5 @@ public class MovementService : IMovementService
     private bool IsInvalidTurn(int degree) =>
         degree < TurnRules.MinDegrees
         || degree > TurnRules.MaxDegrees
-        || (degree % TurnRules.StepDegrees) is not 0;
+        || (degree % TurnRules.StepDegrees) is not Empty;
 }

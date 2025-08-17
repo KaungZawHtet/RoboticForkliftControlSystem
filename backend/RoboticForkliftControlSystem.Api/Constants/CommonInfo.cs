@@ -19,3 +19,9 @@ public static class MovementActions
     public const char Left = 'L';
     public const char Right = 'R';
 }
+
+public static class FileTypes
+{
+    public const string Csv = ".csv";
+    public const string Json = ".json";
+}

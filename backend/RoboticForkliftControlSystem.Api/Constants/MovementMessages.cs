@@ -33,4 +33,6 @@ public static class MovementMessages
     public static string TurnLeft(int degrees) => $"Turn Left by {degrees} degrees.";
 
     public static string TurnRight(int degrees) => $"Turn Right by {degrees} degrees.";
+
+    public const string ParsingError = "Error parsing movement command.";
 }

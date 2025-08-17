@@ -8,4 +8,4 @@ public interface IForkliftService
     Task<List<Forklift>> ImportForkliftsFromCsvAsync(Stream csvStream);
     Task<List<Forklift>> ImportForkliftsFromJsonAsync(Stream jsonStream);
     Task SaveForkliftsAsync(List<Forklift> forklifts);
- }
+}

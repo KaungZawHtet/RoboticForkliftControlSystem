@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using RoboticForkliftControlSystem.Api.Abstractions;
+using RoboticForkliftControlSystem.Api.Constants;
 using RoboticForkliftControlSystem.Api.Entities;
 
 namespace RoboticForkliftControlSystem.Api.Controllers
@@ -23,18 +24,21 @@ namespace RoboticForkliftControlSystem.Api.Controllers
                 var forklifts = await _forkliftService.GetAllForkliftsAsync();
                 return Ok(forklifts);
             }
-            catch (Exception ex)
+            catch
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    ForkliftMessages.InternalServerError
+                );
             }
         }
 
         [HttpPost("import")]
         public async Task<ActionResult<List<Forklift>>> ImportForklifts(IFormFile file)
         {
-            if (file == null || file.Length == 0)
+            if (file is null || file.Length is 0)
             {
-                return BadRequest("No file uploaded");
+                return BadRequest(ForkliftMessages.NoFileUploaded);
             }
 
             try
@@ -44,18 +48,12 @@ namespace RoboticForkliftControlSystem.Api.Controllers
 
                 using var stream = file.OpenReadStream();
 
-                if (fileExtension == ".csv")
+                forklifts = fileExtension switch
                 {
-                    forklifts = await _forkliftService.ImportForkliftsFromCsvAsync(stream);
-                }
-                else if (fileExtension == ".json")
-                {
-                    forklifts = await _forkliftService.ImportForkliftsFromJsonAsync(stream);
-                }
-                else
-                {
-                    return BadRequest("Unsupported file format. Please upload a CSV or JSON file.");
-                }
+                    FileTypes.Csv => await _forkliftService.ImportForkliftsFromCsvAsync(stream),
+                    FileTypes.Json => await _forkliftService.ImportForkliftsFromJsonAsync(stream),
+                    _ => throw new ArgumentException(ForkliftMessages.UnsupportedFileFormat),
+                };
 
                 if (forklifts.Any())
                 {
@@ -64,9 +62,12 @@ namespace RoboticForkliftControlSystem.Api.Controllers
 
                 return Ok(forklifts);
             }
-            catch (Exception ex)
+            catch
             {
-                return StatusCode(500, $"Error importing forklifts: {ex.Message}");
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    ForkliftMessages.ImportingError
+                );
             }
         }
     }
