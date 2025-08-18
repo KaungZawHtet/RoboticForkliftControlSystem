@@ -5,7 +5,7 @@ on:
         branches: [main]
         paths:
             - 'backend/**'
-            - '.github/workflows/main_robotic-forklift-control-system-be.yml'
+            - '.github/workflows/deploy-be.yml'
     workflow_dispatch:
 
 defaults:
