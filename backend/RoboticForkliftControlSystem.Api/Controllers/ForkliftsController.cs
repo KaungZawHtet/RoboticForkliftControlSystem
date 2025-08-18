@@ -10,10 +10,15 @@ namespace RoboticForkliftControlSystem.Api.Controllers
     public class ForkliftsController : ControllerBase
     {
         private readonly IForkliftService _forkliftService;
+        private readonly ILogger<ForkliftsController> _logger;
 
-        public ForkliftsController(IForkliftService forkliftService)
+        public ForkliftsController(
+            IForkliftService forkliftService,
+            ILogger<ForkliftsController> logger
+        )
         {
             _forkliftService = forkliftService;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -24,8 +29,9 @@ namespace RoboticForkliftControlSystem.Api.Controllers
                 var forklifts = await _forkliftService.GetAllForkliftsAsync();
                 return Ok(forklifts);
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, ForkliftMessages.InternalServerError);
                 return StatusCode(
                     StatusCodes.Status500InternalServerError,
                     ForkliftMessages.InternalServerError
@@ -62,8 +68,9 @@ namespace RoboticForkliftControlSystem.Api.Controllers
 
                 return Ok(forklifts);
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, ForkliftMessages.ImportingError);
                 return StatusCode(
                     StatusCodes.Status500InternalServerError,
                     ForkliftMessages.ImportingError
