@@ -1,65 +1,87 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
-name: Build and deploy ASP.Net Core app to Azure Web App - robotic-forklift-control-system-be
+name: Deploy Backend to Azure App Service (OIDC)
 
 on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
+    push:
+        branches: [main]
+        paths:
+            - 'backend/**'
+            - '.github/workflows/main_robotic-forklift-control-system-be.yml'
+    workflow_dispatch:
+
+defaults:
+    run:
+        shell: bash # ensure $VAR expansion works
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read #This is required for actions/checkout
+    build-and-deploy:
+        runs-on: ubuntu-latest
+        permissions:
+            id-token: write
+            contents: read
 
-    steps:
-      - uses: actions/checkout@v4
+        env:
+            PROJECT: backend/RoboticForkliftControlSystem.Api/RoboticForkliftControlSystem.Api.csproj
+            PUBLISH_DIR: backend/publish
+            AZURE_WEBAPP_NAME: robotic-forklift-control-system-be
+            AZURE_WEBAPP_SUBDOMAIN: robotic-forklift-control-system-be-ckcmh9c6a7ghdhhv.southeastasia-01
 
-      - name: Set up .NET Core
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '8.x'
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
 
-      - name: Build with dotnet
-        run: dotnet build --configuration Release
+            - name: Setup .NET 9
+              uses: actions/setup-dotnet@v4
+              with:
+                  dotnet-version: '9.0.x'
 
-      - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+            - name: Cache NuGet
+              uses: actions/cache@v4
+              with:
+                  path: ~/.nuget/packages
+                  key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+                  restore-keys: |
+                      ${{ runner.os }}-nuget-
 
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v4
-        with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+            - name: Restore
+              run: dotnet restore "${{ env.PROJECT }}"
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    permissions:
-      id-token: write #This is required for requesting the JWT
-      contents: read #This is required for actions/checkout
+            - name: Build
+              run: dotnet build "${{ env.PROJECT }}" -c Release --no-restore
 
-    steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v4
-        with:
-          name: .net-app
-      
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_80773CDC3207430A99BAEB00F0F3893F }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_61776BA1BC154E91B9DF52A14CB319D6 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_B7F2CCBE8E4B401AA97464779936763A }}
+            - name: Test
+              run: |
+                  if [ -f "backend/RoboticForkliftControlSystem.Tests/RoboticForkliftControlSystem.Tests.csproj" ]; then
+                    dotnet test backend/RoboticForkliftControlSystem.Tests/RoboticForkliftControlSystem.Tests.csproj -c Release --no-build
+                  else
+                    echo "No tests project. Skipping."
+                  fi
 
-      - name: Deploy to Azure Web App
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v3
-        with:
-          app-name: 'robotic-forklift-control-system-be'
-          slot-name: 'Production'
-          package: .
-          
+            - name: Publish
+              run: dotnet publish "${{ env.PROJECT }}" -c Release -o "${{ env.PUBLISH_DIR }}" /p:UseAppHost=false
+
+            - name: Azure Login (OIDC)
+              uses: azure/login@v2
+              with:
+                  client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_80773CDC3207430A99BAEB00F0F3893F }}
+                  tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_61776BA1BC154E91B9DF52A14CB319D6 }}
+                  subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_AB899ADA5DA645E29074BC09033CB6F3 }}
+
+            - name: Deploy to Azure Web App
+              uses: azure/webapps-deploy@v3
+              with:
+                  app-name: ${{ env.AZURE_WEBAPP_NAME }}
+                  package: ${{ env.PUBLISH_DIR }}
+            - name: Health check
+              run: |
+                  URL="https://${{ env.AZURE_WEBAPP_SUBDOMAIN }}.azurewebsites.net/healthz"
+                  echo "Checking $URL"
+                  for i in {1..20}; do
+                    code=$(curl -sk -o /dev/null -w "%{http_code}" "$URL")
+                    if [ "$code" = "200" ]; then
+                      echo "Healthy."
+                      exit 0
+                    fi
+                    echo "Waiting for healthy (got $code)..."
+                    sleep 5
+                  done
+                  echo "Health check failed"
