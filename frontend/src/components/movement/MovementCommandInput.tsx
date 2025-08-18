@@ -50,7 +50,6 @@ export const MovementCommandInput: React.FC<MovementCommandInputProps> = ({
       <CardContent className="space-y-4">
         {/* Command Format Help */}
         <Alert variant="info">
-          <HelpCircle className="h-4 w-4" />
           <div>
             <p className="font-medium mb-2">Command Format:</p>
             <ul className="text-sm space-y-1">

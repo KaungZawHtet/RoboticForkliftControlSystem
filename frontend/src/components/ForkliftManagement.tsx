@@ -1,5 +1,5 @@
 import React from 'react'
-import { Truck } from 'lucide-react'
+import { Forklift, Truck } from 'lucide-react'
 import { ForkliftTable } from './forklift/ForkliftTable'
 import { FileUpload } from './forklift/FileUpload'
 import { MovementCommandInput } from './movement/MovementCommandInput'
@@ -39,8 +39,8 @@ export const ForkliftManagement: React.FC = () => {
           <div className="bg-white shadow rounded-lg">
             <div className="px-6 py-4 border-b border-gray-200">
               <h1 className="text-3xl font-bold text-gray-900 flex items-center">
-                <Truck className="mr-3 h-8 w-8 text-blue-600" />
-                Forklift Fleet Management System
+                <Forklift className="mr-3 h-8 w-8 text-blue-600" />
+                Robotic Forklift Control System
               </h1>
               <p className="mt-2 text-gray-600">
                 Manage your forklift fleet and parse movement commands
