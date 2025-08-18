@@ -1,10 +1,10 @@
-import React from 'react';
-import { AlertCircle, CheckCircle, Info, AlertTriangle } from 'lucide-react';
-import { cn } from '../../utils';
+import React from 'react'
+import { AlertCircle, CheckCircle, Info, AlertTriangle } from 'lucide-react'
+import { cn } from '../../utils'
 
 interface AlertProps extends React.HTMLAttributes<HTMLDivElement> {
-  variant?: 'info' | 'success' | 'warning' | 'error';
-  children: React.ReactNode;
+  variant?: 'info' | 'success' | 'warning' | 'error'
+  children: React.ReactNode
 }
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
@@ -14,16 +14,16 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
       success: 'border-green-200 bg-green-50 text-green-800',
       warning: 'border-yellow-200 bg-yellow-50 text-yellow-800',
       error: 'border-red-200 bg-red-50 text-red-800',
-    };
+    }
 
     const icons = {
       info: Info,
       success: CheckCircle,
       warning: AlertTriangle,
       error: AlertCircle,
-    };
+    }
 
-    const Icon = icons[variant];
+    const Icon = icons[variant]
 
     return (
       <div
@@ -39,9 +39,9 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
         <Icon className="h-4 w-4" />
         <div>{children}</div>
       </div>
-    );
+    )
   }
-);
+)
 
-Alert.displayName = 'Alert';
-export { Alert };
+Alert.displayName = 'Alert'
+export { Alert }

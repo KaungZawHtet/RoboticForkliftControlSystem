@@ -1,12 +1,12 @@
-import React from 'react';
-import { Truck } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
-import { formatDate } from '../../utils';
-import type { Forklift } from '../../types';
+import React from 'react'
+import { Truck } from 'lucide-react'
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card'
+import { formatDate } from '../../utils'
+import type { Forklift } from '../../types'
 
 interface ForkliftTableProps {
-  forklifts: Forklift[];
-  isLoading: boolean;
+  forklifts: Forklift[]
+  isLoading: boolean
 }
 
 export const ForkliftTable: React.FC<ForkliftTableProps> = ({ forklifts, isLoading }) => {
@@ -26,7 +26,7 @@ export const ForkliftTable: React.FC<ForkliftTableProps> = ({ forklifts, isLoadi
           </div>
         </CardContent>
       </Card>
-    );
+    )
   }
 
   return (
@@ -80,5 +80,5 @@ export const ForkliftTable: React.FC<ForkliftTableProps> = ({ forklifts, isLoadi
         )}
       </CardContent>
     </Card>
-  );
-};
+  )
+}

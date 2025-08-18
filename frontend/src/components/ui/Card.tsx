@@ -1,8 +1,8 @@
-import React from 'react';
-import { cn } from '../../utils';
+import React from 'react'
+import { cn } from '../../utils'
 
 interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
@@ -18,19 +18,15 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
       {children}
     </div>
   )
-);
+)
 
 const CardHeader = React.forwardRef<HTMLDivElement, CardProps>(
   ({ className, children, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={cn('flex flex-col space-y-1.5 p-6 pb-0', className)}
-      {...props}
-    >
+    <div ref={ref} className={cn('flex flex-col space-y-1.5 p-6 pb-0', className)} {...props}>
       {children}
     </div>
   )
-);
+)
 
 const CardTitle = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLHeadingElement>>(
   ({ className, children, ...props }, ref) => (
@@ -42,7 +38,7 @@ const CardTitle = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HT
       {children}
     </h3>
   )
-);
+)
 
 const CardContent = React.forwardRef<HTMLDivElement, CardProps>(
   ({ className, children, ...props }, ref) => (
@@ -50,11 +46,11 @@ const CardContent = React.forwardRef<HTMLDivElement, CardProps>(
       {children}
     </div>
   )
-);
+)
 
-Card.displayName = 'Card';
-CardHeader.displayName = 'CardHeader';
-CardTitle.displayName = 'CardTitle';
-CardContent.displayName = 'CardContent';
+Card.displayName = 'Card'
+CardHeader.displayName = 'CardHeader'
+CardTitle.displayName = 'CardTitle'
+CardContent.displayName = 'CardContent'
 
-export { Card, CardHeader, CardTitle, CardContent };
+export { Card, CardHeader, CardTitle, CardContent }

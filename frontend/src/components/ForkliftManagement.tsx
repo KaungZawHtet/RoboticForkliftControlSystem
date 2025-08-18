@@ -1,11 +1,11 @@
-import React from 'react';
-import { Truck } from 'lucide-react';
-import { ForkliftTable } from './forklift/ForkliftTable';
-import { FileUpload } from './forklift/FileUpload';
-import { MovementCommandInput } from './movement/MovementCommandInput';
-import { useForkliftData } from '../hooks/useForkliftData';
-import { useMovementCommand } from '../hooks/useMovementCommand';
-import { getErrorMessage } from '../utils';
+import React from 'react'
+import { Truck } from 'lucide-react'
+import { ForkliftTable } from './forklift/ForkliftTable'
+import { FileUpload } from './forklift/FileUpload'
+import { MovementCommandInput } from './movement/MovementCommandInput'
+import { useForkliftData } from '../hooks/useForkliftData'
+import { useMovementCommand } from '../hooks/useMovementCommand'
+import { getErrorMessage } from '../utils'
 
 export const ForkliftManagement: React.FC = () => {
   const {
@@ -14,22 +14,22 @@ export const ForkliftManagement: React.FC = () => {
     uploadFile,
     isUploading,
     uploadError,
-  } = useForkliftData();
+  } = useForkliftData()
 
   const {
     parseCommand,
     result: movementResult,
     isLoading: isParsing,
     error: parseError,
-  } = useMovementCommand();
+  } = useMovementCommand()
 
   const handleFileUpload = (file: File) => {
-    uploadFile(file);
-  };
+    uploadFile(file)
+  }
 
   const handleCommandSubmit = (command: string) => {
-    parseCommand(command);
-  };
+    parseCommand(command)
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -68,11 +68,8 @@ export const ForkliftManagement: React.FC = () => {
         </div>
 
         {/* Forklift Table */}
-        <ForkliftTable
-          forklifts={forklifts}
-          isLoading={isLoadingForklifts}
-        />
+        <ForkliftTable forklifts={forklifts} isLoading={isLoadingForklifts} />
       </div>
     </div>
-  );
-};
+  )
+}
