@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { apiService } from '../services/api'
 import { toast } from 'react-hot-toast'
-import { QUERY_KEYS, UI_MESSAGES } from '../config/constants'
+import { QUERY_KEYS } from '../config/constants'
 import type { Forklift } from '../types'
 
 export function useForkliftData() {
@@ -26,13 +26,11 @@ export function useForkliftData() {
     mutationFn: (file: File) => apiService.uploadFile(file),
     onSuccess: (newForklifts: Forklift[]) => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.FORKLIFTS })
-      toast.success(
-        `${UI_MESSAGES.SUCCESS.FILE_UPLOADED}: ${newForklifts.length} forklifts imported`
-      )
+      toast.success(`File uploaded successfully: ${newForklifts.length} forklifts imported`)
     },
     onError: (error) => {
       console.error('Upload failed:', error)
-      toast.error(UI_MESSAGES.ERROR.FILE_UPLOAD_FAILED)
+      toast.error('Failed to upload file')
     },
   })
 

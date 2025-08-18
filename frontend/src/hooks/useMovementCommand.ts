@@ -1,17 +1,16 @@
 import { useMutation } from '@tanstack/react-query'
 import { apiService } from '../services/api'
 import { toast } from 'react-hot-toast'
-import { UI_MESSAGES } from '../config/constants'
 
 export function useMovementCommand() {
   const mutation = useMutation({
     mutationFn: (command: string) => apiService.parseMovementCommand(command),
     onSuccess: () => {
-      toast.success(UI_MESSAGES.SUCCESS.COMMAND_PARSED)
+      toast.success('Command parsed successfully')
     },
     onError: (error) => {
       console.error('Command parsing failed:', error)
-      toast.error(UI_MESSAGES.ERROR.COMMAND_PARSE_FAILED)
+      toast.error('Failed to parse movement command')
     },
   })
 

@@ -6,7 +6,7 @@ import { Button } from '../ui/Button'
 import { Alert } from '../ui/Alert'
 import { formatFileSize } from '../../utils'
 import type { FileUploadForm } from '../../types'
-import { FILE_CONFIG, UI_MESSAGES } from '../../config/constants'
+import { FILE_CONFIG } from '../../config/constants'
 
 interface FileUploadProps {
   onFileUpload: (file: File) => void
@@ -44,10 +44,10 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload, isUploadin
     const dot = file.name.lastIndexOf('.')
     const ext = dot >= 0 ? file.name.slice(dot).toLowerCase() : ''
     if (!FILE_CONFIG.ACCEPTED_TYPES.map((t) => t.toLowerCase()).includes(ext)) {
-      return { isValid: false, error: UI_MESSAGES.ERROR.INVALID_FILE_TYPE }
+      return { isValid: false, error: 'Invalid file type. Please upload CSV or JSON files only.' }
     }
     if (file.size > FILE_CONFIG.MAX_SIZE_BYTES) {
-      return { isValid: false, error: UI_MESSAGES.ERROR.FILE_TOO_LARGE }
+      return { isValid: false, error: 'File size exceeds 10MB limit' }
     }
     return { isValid: true }
   }
