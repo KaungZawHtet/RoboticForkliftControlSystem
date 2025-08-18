@@ -1,5 +1,5 @@
 import React from 'react'
-import { Send, HelpCircle } from 'lucide-react'
+import { Send } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card'
 import { Button } from '../ui/Button'
