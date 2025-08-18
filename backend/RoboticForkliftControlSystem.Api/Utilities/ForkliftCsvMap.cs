@@ -11,8 +11,8 @@ public class ForkliftCsvMap : ClassMap<Forklift>
 {
     public ForkliftCsvMap()
     {
-        Map(m => m.Name).Name("Name");
-        Map(m => m.ModelNumber).Name("ModelNumber");
-        Map(m => m.ManufacturingDate).Name("ManufacturingDate");
+        Map(m => m.Name).Name("name");
+        Map(m => m.ModelNumber).Name("model_number");
+        Map(m => m.ManufacturingDate).Name("manufacturing_date");
     }
 }
