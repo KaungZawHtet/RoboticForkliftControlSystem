@@ -1,5 +1,5 @@
 import React from 'react'
-import { Forklift, Truck } from 'lucide-react'
+import { Forklift } from 'lucide-react'
 import { ForkliftTable } from './forklift/ForkliftTable'
 import { FileUpload } from './forklift/FileUpload'
 import { MovementCommandInput } from './movement/MovementCommandInput'
