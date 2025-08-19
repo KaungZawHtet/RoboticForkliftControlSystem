@@ -33,6 +33,7 @@ I tried to improve the maintainability and best practices in BE by doing these t
     5. Unit Tests and usable logging
 
 For React, I made sure these things
+
     1. Used proper and clean folder structure
     2. Used proper Linter and formatter usage
     3. Considered component reusability
