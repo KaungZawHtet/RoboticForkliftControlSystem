@@ -48,7 +48,7 @@ For React, I made sure these things
 
 When Project is not big enough, I skipped these things
 
-1. Enricher and more complete Application Insight sinks
+1. Richer and more complete Application Insight config and sinks
 2. Testing at FE (eg. playwright or vite testing)
 3. Magic String management in FE because according to my previous experience, proper string/Text management in FE is about ability to handle i18n. (Eg. keep the strings in json and manage with i18n Lib ). For now, we don't have i18n requirement so I considered to skip it.
 4. delete feature in forklift table would give smoother experience. 
