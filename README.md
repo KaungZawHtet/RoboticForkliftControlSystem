@@ -46,7 +46,7 @@ For React, I made sure these things
 
 ### Room for improvement
 
-When Project is not big enough, I skip these features
+When Project is not big enough, I skipped these things
 
 1. Enricher and more complete Application Insight sinks
 2. Testing at FE (eg. playwright or vite testing)
