@@ -31,4 +31,4 @@ export const QUERY_KEYS = {
   FORKLIFTS: ['forklifts'] as const,
 }
 
-export const REGEX_FOR_COMMEND = ''
+export const REGEX_FOR_COMMEND = /^[FBLR]\d+([FBLR]\d+)*$/i;

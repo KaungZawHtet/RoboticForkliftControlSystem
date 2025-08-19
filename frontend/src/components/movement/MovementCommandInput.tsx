@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card'
 import { Button } from '../ui/Button'
 import { Alert } from '../ui/Alert'
 import type { MovementCommandForm, MovementResult } from '../../types'
+import { REGEX_FOR_COMMEND } from '../../config/constants'
 
 interface MovementCommandInputProps {
   onCommandSubmit: (command: string) => void
@@ -77,7 +78,7 @@ export const MovementCommandInput: React.FC<MovementCommandInputProps> = ({
                 {...register('command', {
                   required: 'Please enter a movement command',
                   pattern: {
-                    value: /^[FBLR]\d+([FBLR]\d+)*$/i,
+                    value: REGEX_FOR_COMMEND,
                     message: 'Invalid command format',
                   },
                 })}
