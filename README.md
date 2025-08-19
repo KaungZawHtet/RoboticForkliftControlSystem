@@ -2,6 +2,10 @@
 
 You can check this app at [forklift.kaungzawhtet.site](https://forklift.kaungzawhtet.site/)
 
+## Demo Video
+
+[![Watch the video](https://img.youtube.com/vi/P0rQ7L4lUUw/0.jpg)](https://www.youtube.com/watch?v=P0rQ7L4lUUw)
+
 ## Deployment Strategy
 
 Because this deployment is just for a mini project, I considered to use cost efficient solution.
